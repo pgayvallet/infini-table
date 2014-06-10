@@ -1,0 +1,16 @@
+{
+  "name": "infini-table",
+  "version": "0.8.0",
+  "dependencies": {
+    "underscore": "1.6.0",
+    "font-awesome": "4.1.0",
+    "jquery": "2.1.0",
+    "jquery-mousewheel": "3.1.9",
+    "jquery-ui": "1.10.3",
+    "angular": ">= 1.2.15"
+  },
+  "devDependencies": {
+    "angular-mocks": ">= 1.2.15",
+    "angular-scenario": ">= 1.2.15"
+  }
+}

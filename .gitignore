@@ -2,3 +2,5 @@
 *.iws
 *.ipr
 *.idea
+bower_components
+node_modules
