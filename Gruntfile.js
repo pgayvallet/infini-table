@@ -211,6 +211,7 @@ module.exports = function (grunt) {
                     files: [
                         '<%= build_dir %>/libs.js',
                         "<%= bower_dir %>/angular-mocks/angular-mocks.js",
+                        "<%= test_dir %>/matchers/**/*.js",
                         "<%= build_dir %>/infiniTable.js",
                         '<%= files.test.unit %>'
                     ],

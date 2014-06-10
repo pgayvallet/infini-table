@@ -1,6 +1,6 @@
 'use strict';
 
-itModule.factory("itUtils", function() {
+itModule.factory("itUtils", function($parse) {
 
     var itUtils = {
 
@@ -61,6 +61,11 @@ itModule.factory("itUtils", function() {
             });
         },
 
+        /**
+         * Traverse given scope and all of the scope children tree, calling given function for each scope.
+         * @param parentScope
+         * @param traverseFn The function executed for each scope, having the scope as only parameter.
+         */
         traverseScopeTree : function(parentScope, traverseFn) {
             var next,
                 current = parentScope,
@@ -77,6 +82,9 @@ itModule.factory("itUtils", function() {
             } while((current = next));
         },
 
+        /**
+         * Aliases for common keyboard key codes
+         */
         keyCodes : {
             BACKSPACE: 8,
             COMMA: 188,
