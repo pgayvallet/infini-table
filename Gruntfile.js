@@ -21,11 +21,7 @@ module.exports = function (grunt) {
         files : {
             core : [
                 "src/__module__.js",
-                "src/infiniTable.js",
-                "src/itUtils.js",
-                "src/itDefaultConfig.js",
-                "src/itSortFactory.js",
-                "src/itTableRegistry.js"
+                "src/**/*.js"
             ],
             test : {
                 unit : "test/unit/**/*.js"
