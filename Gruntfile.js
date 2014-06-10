@@ -9,42 +9,41 @@ module.exports = function (grunt) {
 
         pkg: grunt.file.readJSON("bower.json"),
 
+        paths : {
+            bower : "bower_components"
+        },
+
         bower_dir : "bower_components",
         build_dir : "build",
         dist_dir  : "dist",
+        test_dir  : "test",
 
         files : {
             core : [
+                "src/__module__.js",
+                "src/infiniTable.js",
+                "src/itUtils.js",
+                "src/itDefaultConfig.js",
+                "src/itSortFactory.js",
+                "src/itTableRegistry.js"
             ],
-            test : []
-
+            test : {
+                unit : "test/unit/**/*.js"
+            }
         },
 
         libs: {
-            js: {
-                concat_file: "<%= paths.build %>/libs.js",
-                min_file: "<%= paths.build %>/libs.min.js",
-                paths: [
-                    "<%= paths.bower %>/underscore/underscore.js",
-                    "<%= paths.bower %>/jquery/dist/jquery.js",
-                    "<%= paths.bower %>/jquery-ui/ui/jquery.ui.core.js",
-                    "<%= paths.bower %>/jquery-ui/ui/jquery.ui.widget.js",
-                    "<%= paths.bower %>/jquery-ui/ui/jquery.ui.mouse.js",
-                    "<%= paths.bower %>/jquery-ui/ui/jquery.ui.position.js",
-                    "<%= paths.bower %>/jquery-ui/ui/jquery.ui.draggable.js",
-                    "<%= paths.bower %>/jquery-mousewheel/jquery.mousewheel.js",
-                    "<%= paths.bower %>/angular/angular.js"
-                ]
-            },
-
-
-            test: {
-                concat_file: "<%= paths.build %>/libs-test.js",
-                paths: [
-                    "<%= paths.bower %>/angular-mocks/angular-mocks.js",
-                    "<%= paths.test %>/matchers/**/*.js"
-                ]
-            }
+            js: [
+                "<%= paths.bower %>/underscore/underscore.js",
+                "<%= paths.bower %>/jquery/dist/jquery.js",
+                "<%= paths.bower %>/jquery-ui/ui/jquery.ui.core.js",
+                "<%= paths.bower %>/jquery-ui/ui/jquery.ui.widget.js",
+                "<%= paths.bower %>/jquery-ui/ui/jquery.ui.mouse.js",
+                "<%= paths.bower %>/jquery-ui/ui/jquery.ui.position.js",
+                "<%= paths.bower %>/jquery-ui/ui/jquery.ui.draggable.js",
+                "<%= paths.bower %>/jquery-mousewheel/jquery.mousewheel.js",
+                "<%= paths.bower %>/angular/angular.js"
+            ]
 
         },
 
@@ -77,56 +76,21 @@ module.exports = function (grunt) {
                 separator: '\n'
             },
 
-            libs: {
-                files: {
-                    "<%= libs.js.concat_file %>": ["<%= libs.js.paths %>"]
-                }
-            },
-
             app: {
                 options: {
-                    banner: "'use strict';\n",
-                    process: function (src, filepath) {
-                        // removing individual 'use strict' declarations.
-                        var processed = src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-                        // adding __FILEPATH__ var to each files.
-                        var folderPath = filepath.substring("app".length, filepath.lastIndexOf("/"));
-                        processed =
-                            "// " + filepath + "\n" +
-                                "(function() {\n" +
-                                "var __FOLDER_PATH__ = '" + folderPath + "';\n" +
-                                processed + "\n" +
-                                "})();";
-                        return processed;
-                    }
+                    banner: "'use strict';\n"
                 },
                 files: {
-                    '<%= scripts.public.concat_file %>': ["<%= scripts.public.paths %>"],
-                    '<%= scripts.common.concat_file %>': ["<%= scripts.common.paths %>"],
-                    '<%= scripts.intra.concat_file %>': ["<%= scripts.intra.paths %>"],
-                    '<%= scripts.tael.concat_file %>': ["<%= scripts.tael.paths %>"]
+                    '<%= build_dir %>/infiniTable.js': ["<%= files.core %>"]
                 }
             },
 
-            pkg: {
+            libs : {
                 files: {
-                    '<%= scripts.public.pkg_file %>': [
-                        '<%= scripts.public.concat_file %>'
-                    ],
-                    '<%= scripts.intra.pkg_file %>': [
-                        '<%= scripts.common.annot_file %>',
-                        '<%= scripts.intra.annot_file %>',
-                        '<%= scripts.compiled_tpl.common %>',
-                        '<%= scripts.compiled_tpl.intra %>'
-                    ],
-                    '<%= scripts.tael.pkg_file %>': [
-                        '<%= scripts.common.annot_file %>',
-                        '<%= scripts.tael.annot_file %>',
-                        '<%= scripts.compiled_tpl.common %>',
-                        '<%= scripts.compiled_tpl.tael %>'
-                    ]
+                    '<%= build_dir %>/libs.js': ["<%= libs.js %>"]
                 }
             }
+
         },
 
         ngmin: {
@@ -178,7 +142,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         dot: true,
-                        src: ['<%= paths.dist %>/*']
+                        src: ['<%= dist_dir %>/*']
                     }
                 ]
             }
@@ -245,15 +209,10 @@ module.exports = function (grunt) {
                 frameworks: ['jasmine'],
                 options: {
                     files: [
-                        "<%= libs.js.concat_file %>",
-                        "<%= libs.test.concat_file %>",
-                        "<%= scripts.common.concat_file %>",
-                        '<%= scripts.compiled_tpl.common %>',
-                        "<%= scripts.tael.concat_file %>",
-                        '<%= scripts.compiled_tpl.tael %>',
-                        "<%= scripts.intra.concat_file %>",
-                        '<%= scripts.compiled_tpl.intra %>',
-                        '<%= paths.test %>/spec/**/*.js'
+                        '<%= build_dir %>/libs.js',
+                        "<%= bower_dir %>/angular-mocks/angular-mocks.js",
+                        "<%= build_dir %>/infiniTable.js",
+                        '<%= files.test.unit %>'
                     ],
                     exclude: []
                 },
@@ -267,6 +226,7 @@ module.exports = function (grunt) {
 
     });
 
+    /*
     grunt.registerTask('process-js', [
         'concat:app'
     ]);
@@ -322,30 +282,25 @@ module.exports = function (grunt) {
         "copy:dist",
         "compress:dist"
     ]);
+    */
 
     // top level tasks
 
+    /*
     grunt.registerTask('test', [
         'clean:build',
         'build-dev',
         'run-test'
     ]);
+    */
 
-    grunt.registerTask("package", function () {
-        grunt.task.run(
-            'clean',
-            'build-dev',
-            'run-test',
-            'build-dist'
-        );
-    });
-
-    grunt.registerTask('server', [
-        'clean:build',
-        'build-dev',
-        'configureProxies',
-        'connect:livereload',
-        'watch'
+    grunt.registerTask("package", [
+        'clean',
+        'concat:app',
+        'concat:libs',
+        "karma:unit"
+        //'run-test',
+        //'build-dist'
     ]);
 
     grunt.registerTask('default', ["package"]);

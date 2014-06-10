@@ -1,6 +1,6 @@
 describe('Directive : infiniTable', function () {
 
-    beforeEach(module('taelys.common'));
+    beforeEach(module('infiniTable'));
 
     var $compile,
         $document,

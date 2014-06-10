@@ -1,0 +1,25 @@
+--- TODO :
+
+- BUGFIX : table relative position when table containsn exactly number of row to fill the height
+
+- row selection
+    - improve system to remove per-row watch
+    - implement allowUnselect
+    - implement multipleSelection
+
+- sorting
+    - clean itSortFactory
+    - custom sorting function
+    - add sortAttribute
+    - check if sortType exists and warn if not
+
+- allow smarter way to select a row than with the onRowClick handler
+- update directive name (it-* not infinitable-*)
+- allow to disable scroll mode ( more gracefully than with width : 1000000px ... )
+- pagination mode ?
+- column sizing with minWidth / width / maxWidth approach ?
+- optimise rendering
+- regroup config option in sub objects
+- add tests
+- massive cleanup
+- remove console.log's
