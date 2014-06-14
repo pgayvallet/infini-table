@@ -5,12 +5,22 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
+    var mountFolder = function (connect, dir) {
+        return connect.static(require('path').resolve(dir));
+    };
+
     grunt.initConfig({
 
         pkg: grunt.file.readJSON("bower.json"),
 
         paths : {
-            bower : "bower_components"
+            src   : "src",
+            bower : "bower_components",
+            build : "build",
+            dist  : "dist",
+            test  : "test",
+            demo  : "demo",
+            css   : "css"
         },
 
         bower_dir : "bower_components",
@@ -20,7 +30,7 @@ module.exports = function (grunt) {
 
         files : {
             core : [
-                "src/__module__.js",
+                "src/itModule.js",
                 "src/**/*.js"
             ],
             test : {
@@ -38,9 +48,9 @@ module.exports = function (grunt) {
                 "<%= paths.bower %>/jquery-ui/ui/jquery.ui.position.js",
                 "<%= paths.bower %>/jquery-ui/ui/jquery.ui.draggable.js",
                 "<%= paths.bower %>/jquery-mousewheel/jquery.mousewheel.js",
-                "<%= paths.bower %>/angular/angular.js"
+                "<%= paths.bower %>/angular/angular.js",
+                "<%= paths.bower %>/angular-route/angular-route.js"
             ]
-
         },
 
         styles: {
@@ -77,7 +87,13 @@ module.exports = function (grunt) {
                     banner: "'use strict';\n"
                 },
                 files: {
-                    '<%= build_dir %>/infiniTable.js': ["<%= files.core %>"]
+                    '<%= paths.build %>/infiniTable.js': ["<%= files.core %>"]
+                }
+            },
+
+            demo : {
+                files : {
+                    '<%= paths.build %>/infiniTable-demo.js' : ["demo/demo-app.js", "demo/demos/**/*.js"]
                 }
             },
 
@@ -102,9 +118,13 @@ module.exports = function (grunt) {
         less: {
             app: {
                 files: {
-                    "<%= styles.public.concat_file %>": ["<%= styles.public.paths %>"],
-                    "<%= styles.tael.concat_file %>": ["<%= styles.tael.paths %>"],
-                    "<%= styles.intra.concat_file %>": ["<%= styles.intra.paths %>"]
+                    "<%= paths.build %>/infiniTable.css": ["css/infiniTable.less"],
+                    "<%= paths.build %>/infiniTable-themes.css": ["css/themes/**/*.less"]
+                }
+            },
+            demo: {
+                files: {
+                    "<%= paths.build %>/infiniTable-demo.css": ["demo/demo-app.less"]
                 }
             }
         },
@@ -134,11 +154,19 @@ module.exports = function (grunt) {
         },
 
         clean: {
+            build: {
+                files: [
+                    {
+                        dot: true,
+                        src: ['<%= paths.build %>/*']
+                    }
+                ]
+            },
             dist: {
                 files: [
                     {
                         dot: true,
-                        src: ['<%= dist_dir %>/*']
+                        src: ['<%= paths.dist %>/*']
                     }
                 ]
             }
@@ -176,27 +204,48 @@ module.exports = function (grunt) {
             }
         },
 
+        connect: {
+            options: {
+                port: 9000,
+                hostname: 'localhost'
+            },
+            demo: {
+                options: {
+                    middleware: function (connect) {
+                        return [
+                            mountFolder(connect, grunt.config.get("paths.demo")),
+                            mountFolder(connect, grunt.config.get("paths.build"))
+                        ];
+                    }
+                }
+            }
+        },
 
         watch: {
+
             options: {
                 interrupt: true
             },
 
-            templates: {
-                files: ['<%= paths.app %>/**/*.html'],
-                tasks: ['process-html']
-            },
-
             scripts: {
-                files: ['<%= paths.app %>/**/*.js', '!<%= paths.app %>/_/**/*.js'],
-                tasks: ['process-js']
+                files: ['<%= paths.src %>/**/*.js'],
+                tasks: ['concat:app']
             },
 
-            styles: {
-                files: ['<%= paths.app %>/**/*.css', '<%= paths.app %>/**/*.less'],
-                tasks: ['process-css']
-            }
+            css: {
+                files: ['<%= paths.css %>/**/*.less'],
+                tasks: ['less:app']
+            },
 
+            demoJs : {
+                files: ['<%= paths.demo %>/**/*.js'],
+                tasks: ['concat:demo']
+            },
+
+            demoCss: {
+                files: ['<%= paths.demo %>/**/*.less'],
+                tasks: ['less:demo']
+            }
         },
 
         karma: {
@@ -291,13 +340,37 @@ module.exports = function (grunt) {
     ]);
     */
 
-    grunt.registerTask("package", [
-        'clean',
+
+    grunt.registerTask("build-src", [
         'concat:app',
         'concat:libs',
+        "less:app"
+    ]);
+
+    grunt.registerTask("build-demo", [
+        "concat:demo",
+        "less:demo"
+    ]);
+
+    // package-table
+    // package-site
+
+    grunt.registerTask("package", [
+        'clean',
+        "build-src",
+        "build-demo",
+
         "karma:unit"
         //'run-test',
         //'build-dist'
+    ]);
+
+
+    grunt.registerTask("run-demo", [
+        "build-src",
+        "build-demo",
+        "connect:demo",
+        "watch"
     ]);
 
     grunt.registerTask('default', ["package"]);

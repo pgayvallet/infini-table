@@ -1,4 +1,4 @@
---- TODO :
+---
 
 - BUGFIX : table relative position when table containsn exactly number of row to fill the height
 

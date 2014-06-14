@@ -1,0 +1,57 @@
+@import "../variables";
+
+/* Default infini-table theme */
+
+div.infini-table {
+
+    div.it-head {
+        table {
+
+            tr {
+                th {
+                    &.section-end {
+                        border-right-color: @darkGrey;
+                    }
+                }
+            }
+        }
+    }
+
+    div.it-body {
+        table {
+            tbody {
+
+                tr {
+
+                    td {
+                        &.align-c {
+                            padding-left: 0;
+                            padding-right: 0;
+                        }
+
+                        &.section-end {
+                            border-right-color: @darkGrey;
+                        }
+                    }
+
+                    &.row-hover {
+                        td {
+                            background-color: @lightBlue;
+                        }
+                    }
+
+                    &.selected {
+                        background-color: #c9dde1;
+
+                        td {
+                            background-color: #c9dde1;
+                            border-top: solid 1px @darkBlue;
+                            border-bottom: solid 1px @darkBlue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
