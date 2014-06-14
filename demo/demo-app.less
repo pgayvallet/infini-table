@@ -1,0 +1,65 @@
+@import "../css/variables";
+
+html {
+    font-size: 62.5%;
+    background-color: @white;
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 1.4rem;
+    line-height: 1.43;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+
+    border-bottom: solid 1px @darkGrey;
+    background-color: @lighterGrey;
+    padding: 0.25em;
+}
+
+.main-container {
+    position: absolute;
+    top: 50px;
+    bottom: 0px;
+    width: 100%;
+    overflow: hidden;
+
+    .left-nav {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        width: 200px;
+        border-right: solid @grey 1px;
+    }
+
+    .page-content {
+        position: absolute;
+        top: 0px;
+        left: 200px;
+        bottom: 0px;
+        padding: 1.25em;
+        overflow: auto;
+    }
+
+}
